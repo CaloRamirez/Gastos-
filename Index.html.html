@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Mis gastos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f6f1;--card:#fff;--ink:#14302d;--mute:#6b7d79;--line:#e2e7e2;--brand:#0f5c52;--accent:#f2b632;--bad:#c4462f;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1b19;--card:#152926;--card:#152926;--ink:#eef3ef;--mute:#8fa6a1;--line:#243c38;--brand:#3fb59f;--accent:#f2b632}}
+:root[data-theme="dark"]{--bg:#0d1b19;--card:#152926;--ink:#eef3ef;--mute:#8fa6a1;--line:#243c38;--brand:#3fb59f;--accent:#f2b632}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,-apple-system,sans-serif;line-height:1.4}
+main{max-width:480px;margin:0 auto;padding:16px 16px 48px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.top button{background:none;border:0;color:var(--ink);font-size:22px;padding:8px 12px;cursor:pointer}
+.top h1{font-size:16px;font-weight:600;margin:0;text-transform:capitalize}
+.hero{background:var(--brand);color:#fff;border-radius:24px;padding:22px 22px 18px}
+.hero small{opacity:.8;font-size:14px}
+.total{font-size:46px;font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin:2px 0 14px}
+.bar{height:8px;background:rgba(255,255,255,.22);border-radius:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:8px;transition:width .4s}
+.bar.over i{background:#ff8a70}
+.bud{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-top:8px;opacity:.95}
+.bud button{background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:20px;padding:5px 12px;font:inherit;font-size:13px;cursor:pointer}
+.sum{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}.sum div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px}.sum small{display:block;color:var(--mute);font-size:12px}.sum b{font-size:15px;font-weight:600}.pos{color:var(--brand)}.neg{color:var(--bad)}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:14px}.seg button{border:0;background:none;color:var(--mute);border-radius:9px;padding:9px;font:600 15px 'Bricolage Grotesque',system-ui,sans-serif;cursor:pointer}.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.add{margin:16px 0;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}
+.amt{display:flex;align-items:baseline;gap:6px;border-bottom:2px solid var(--line);padding-bottom:6px}
+.amt span{font-size:28px;font-weight:600;color:var(--mute)}
+.amt input{flex:1;min-width:0;border:0;background:none;color:var(--ink);font:800 34px 'Bricolage Grotesque',system-ui,sans-serif;outline:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{border:1px solid var(--line);background:none;color:var(--ink);border-radius:20px;padding:8px 13px;font:inherit;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#14302d;font-weight:600}
+.note{width:100%;border:1px solid var(--line);background:none;color:var(--ink);border-radius:12px;padding:11px 12px;font:inherit;font-size:15px;margin-bottom:12px}
+.go{width:100%;background:var(--ink);color:var(--bg);border:0;border-radius:14px;padding:14px;font:600 16px 'Bricolage Grotesque',system-ui,sans-serif;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h2{font-size:15px;font-weight:600;margin:24px 0 10px}
+.cat{display:grid;grid-template-columns:96px 1fr auto;gap:10px;align-items:center;font-size:14px;margin-bottom:9px}
+.cat .t{height:10px;background:var(--line);border-radius:6px;overflow:hidden}
+.cat .t i{display:block;height:100%;background:var(--brand);border-radius:6px}
+.cat b{font-weight:600}
+.day{font-size:13px;color:var(--mute);margin:16px 0 6px}
+.row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.row .e{font-size:22px;width:34px;text-align:center}
+.row .m{flex:1;min-width:0}
+.row .m div:first-child{font-size:15px}
+.row .m div:last-child{font-size:13px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .a{font-weight:600}
+.row .x{background:none;border:0;color:var(--mute);font-size:18px;padding:6px;cursor:pointer}
+.empty{color:var(--mute);font-size:14px;padding:12px 0}
+.csv{margin-top:22px;width:100%;background:none;border:1px dashed var(--line);color:var(--mute);border-radius:12px;padding:11px;font:inherit;font-size:14px;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <button id="prev" aria-label="Mes anterior">‹</button>
+    <h1 id="mes"></h1>
+    <button id="next" aria-label="Mes siguiente">›</button>
+  </div>
+
+  <section class="hero">
+    <small>Gastado este mes</small>
+    <div class="total" id="total">₡0</div>
+    <div class="bar" id="bar"><i style="width:0"></i></div>
+    <div class="bud"><span id="budtxt">Sin presupuesto</span><button id="budbtn">Definir presupuesto</button></div>
+  </section>
+
+  <div class="sum">
+    <div><small>Ingresos</small><b class="pos" id="sin">₡0</b></div>
+    <div><small>Gastos</small><b id="sgas">₡0</b></div>
+    <div><small>Balance</small><b id="sbal">₡0</b></div>
+  </div>
+
+  <section class="add">
+    <div class="seg" role="group" aria-label="Tipo"><button id="tg" aria-pressed="true">Gasto</button><button id="ti" aria-pressed="false">Ingreso</button></div>
+    <div class="amt"><span>₡</span><input id="monto" type="text" inputmode="numeric" placeholder="0" aria-label="Monto en colones" autocomplete="off"></div>
+    <div class="chips" id="chips" role="group" aria-label="Categoría"></div>
+    <input class="note" id="nota" placeholder="Nota (opcional)" maxlength="60">
+    <button class="go" id="guardar">Guardar gasto</button>
+  </section>
+
+  <h2>Por categoría</h2>
+  <div id="cats"></div>
+
+  <h2>Movimientos</h2>
+  <div id="lista"></div>
+
+  <button class="csv" id="csv">Copiar movimientos del mes (para Excel)</button>
+</main>
+
+<script>
+(function(){
+  var CATS=[['Comida','🍽️'],['Súper','🛒'],['Transporte','🚗'],['Gasolina','⛽'],['Salidas','🎉'],['Estudios','📚'],['Salud','💊'],['Otros','✨']];
+  var KEY='gastos_crc_v1';
+  var data={items:[],budget:0};
+  try{var s=localStorage.getItem(KEY);if(s)data=JSON.parse(s);}catch(e){}
+  if(!data.items)data.items=[];
+  var view=new Date();view.setDate(1);
+  var INC=[['Salario','💼'],['Propinas','🪙'],['Ventas','🏷️'],['Otros ingresos','💵']];
+  var type='g';
+  var cat=CATS[0][0];
+  var $=function(id){return document.getElementById(id)};
+  var crc=function(n){return '₡'+Math.round(n).toLocaleString('es-CR').replace(/,/g,' ')};
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}}
+  function ym(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
+  function emoji(c){var L=CATS.concat(INC);for(var i=0;i<L.length;i++)if(L[i][0]===c)return L[i][1];return '✨'}
+
+  function chips(){
+    $('chips').innerHTML=(type==='g'?CATS:INC).map(function(c){return '<button class="chip" aria-pressed="'+(c[0]===cat)+'" data-c="'+c[0]+'">'+c[1]+' '+c[0]+'</button>'}).join('');
+  }
+  function setType(t){type=t;cat=(t==='g'?CATS:INC)[0][0];$('tg').setAttribute('aria-pressed',t==='g');$('ti').setAttribute('aria-pressed',t==='i');$('guardar').textContent=t==='g'?'Guardar gasto':'Guardar ingreso';chips();}
+  $('tg').onclick=function(){setType('g')};$('ti').onclick=function(){setType('i')};
+  $('chips').addEventListener('click',function(e){var b=e.target.closest('.chip');if(!b)return;cat=b.dataset.c;chips();});
+
+  $('monto').addEventListener('input',function(){
+    var v=this.value.replace(/\D/g,'');
+    this.value=v?Number(v).toLocaleString('es-CR').replace(/,/g,' '):'';
+  });
+
+  $('guardar').addEventListener('click',function(){
+    var v=Number($('monto').value.replace(/\D/g,''));
+    if(!v){$('monto').focus();return;}
+    data.items.push({id:Date.now(),d:new Date().toISOString(),a:v,t:type,c:cat,n:$('nota').value.trim()});
+    save();$('monto').value='';$('nota').value='';
+    view=new Date();view.setDate(1);render();
+  });
+
+  $('lista').addEventListener('click',function(e){
+    var b=e.target.closest('.x');if(!b)return;
+    var id=Number(b.dataset.id);
+    data.items=data.items.filter(function(i){return i.id!==id});
+    save();render();
+  });
+
+  $('prev').onclick=function(){view.setMonth(view.getMonth()-1);render();};
+  $('next').onclick=function(){view.setMonth(view.getMonth()+1);render();};
+
+  $('budbtn').onclick=function(){
+    var r=prompt('Presupuesto mensual en colones (0 para quitarlo):',data.budget||'');
+    if(r===null)return;
+    data.budget=Number(String(r).replace(/\D/g,''))||0;save();render();
+  };
+
+  $('csv').onclick=function(){
+    var k=ym(view);
+    var rows=data.items.filter(function(i){return ym(new Date(i.d))===k}).map(function(i){
+      return [i.d.slice(0,10),i.t==='i'?'Ingreso':'Gasto',i.a,i.c,(i.n||'').replace(/\t/g,' ')].join('\t')});
+    var txt='Fecha\tTipo\tMonto\tCategoría\tNota\n'+rows.join('\n');
+    var done=function(){$('csv').textContent='¡Copiado! Pegalo en Excel';setTimeout(function(){$('csv').textContent='Copiar movimientos del mes (para Excel)'},2200)};
+    try{navigator.clipboard.writeText(txt).then(done,function(){prompt('Copiá este texto:',txt)});}catch(e){prompt('Copiá este texto:',txt)}
+  };
+
+  function render(){
+    var k=ym(view);
+    $('mes').textContent=view.toLocaleDateString('es-CR',{month:'long',year:'numeric'});
+    var items=data.items.filter(function(i){return ym(new Date(i.d))===k}).sort(function(a,b){return b.id-a.id});
+    var gas=items.filter(function(i){return i.t!=='i'});
+    var tot=gas.reduce(function(s,i){return s+i.a},0);
+    var ing=items.filter(function(i){return i.t==='i'}).reduce(function(s,i){return s+i.a},0);
+    $('total').textContent=crc(tot);
+    $('sin').textContent=crc(ing);$('sgas').textContent=crc(tot);
+    var bal=ing-tot;$('sbal').textContent=(bal<0?'-':'')+crc(Math.abs(bal));$('sbal').className=bal<0?'neg':'pos';
+
+    var bar=$('bar');
+    if(data.budget>0){
+      var p=Math.min(100,tot/data.budget*100);
+      bar.firstChild.style.width=p+'%';
+      bar.className='bar'+(tot>data.budget?' over':'');
+      var left=data.budget-tot;
+      $('budtxt').textContent=left>=0?'Te quedan '+crc(left)+' de '+crc(data.budget):'Te pasaste por '+crc(-left);
+      $('budbtn').textContent='Cambiar';
+    }else{
+      bar.firstChild.style.width='0';bar.className='bar';
+      $('budtxt').textContent='Sin presupuesto';$('budbtn').textContent='Definir presupuesto';
+    }
+
+    var by={};gas.forEach(function(i){by[i.c]=(by[i.c]||0)+i.a});
+    var keys=Object.keys(by).sort(function(a,b){return by[b]-by[a]});
+    $('cats').innerHTML=keys.length?keys.map(function(c){
+      return '<div class="cat"><span>'+emoji(c)+' '+c+'</span><div class="t"><i style="width:'+(by[c]/tot*100)+'%"></i></div><b>'+crc(by[c])+'</b></div>'}).join('')
+      :'<div class="empty">Cuando registrés gastos, vas a ver acá en qué se va la plata.</div>';
+
+    var html='',last='';
+    items.forEach(function(i){
+      var d=new Date(i.d);
+      var lbl=d.toLocaleDateString('es-CR',{weekday:'long',day:'numeric',month:'short'});
+      if(lbl!==last){html+='<div class="day">'+lbl+'</div>';last=lbl;}
+      var note=(i.n||'').replace(/[<>&]/g,'');
+      html+='<div class="row"><div class="e">'+emoji(i.c)+'</div><div class="m"><div>'+i.c+'</div><div>'+(note||d.toLocaleTimeString('es-CR',{hour:'2-digit',minute:'2-digit'}))+'</div></div><div class="a'+(i.t==='i'?' pos':'')+'">'+(i.t==='i'?'+':'')+crc(i.a)+'</div><button class="x" data-id="'+i.id+'" aria-label="Borrar movimiento">✕</button></div>';
+    });
+    $('lista').innerHTML=html||'<div class="empty">Todavía no hay movimientos este mes.</div>';
+  }
+  // Registro rápido desde un atajo: ?t=g|i&m=monto&c=categoria&n=nota
+  try{
+    var q=new URLSearchParams(location.search);
+    var qm=Number((q.get('m')||'').replace(/\D/g,''));
+    if(qm){
+      var qt=q.get('t')==='i'?'i':'g';
+      var names=(qt==='i'?INC:CATS).map(function(x){return x[0]});
+      var qc=q.get('c');if(names.indexOf(qc)<0)qc=names[names.length-1];
+      data.items.push({id:Date.now(),d:new Date().toISOString(),a:qm,t:qt,c:qc,n:(q.get('n')||'').slice(0,60)});
+      save();
+      history.replaceState(null,'',location.pathname);
+    }
+  }catch(e){}
+  chips();render();
+})();
+</script>
+</body>
+</html>
